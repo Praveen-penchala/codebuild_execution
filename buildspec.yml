@@ -21,7 +21,7 @@ phases:
   pre_build:
     commands:
       - echo Initializing Terraform...
-      - cd lac-terraform
+      - cd terraform_code
       - terraform version
       - terraform init
 
