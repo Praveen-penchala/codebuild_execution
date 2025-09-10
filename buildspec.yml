@@ -1,7 +1,7 @@
 phases:
   install:
     version: 0.2
-      # python: 3.8  # Temporary, Python 3.13.5 will be installed manually
+      python: 3.8  # Temporary, Python 3.13.5 will be installed manually
     commands:
       - echo Installing base tools...
       - yum install -y git curl wget unzip --skip-broken
