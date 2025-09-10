@@ -1,12 +1,3 @@
-terraform {
-  backend "s3" {
-    bucket  = "praveen.statefile"
-    key     = "terraform.tfstate"
-    region  = "ap-south-2"
-    encrypt = true
-  }
-}
-
 resource "aws_instance" "name" {
   ami                    = "ami-0bd4cda58efa33d23"
   instance_type          = "t3.micro"
