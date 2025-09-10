@@ -22,7 +22,7 @@ phases:
   -./configure --enable-optimizations
   -make altinstall
   -python3.13 --version
-  - In -s /usr/local/bin/python3.13 /usr/local/bin/python3
+   #- In -s /usr/local/bin/python3.13 /usr/local/bin/python3
 pre_build:
   commands:
    echo Initializing Terraform...
