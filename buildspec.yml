@@ -1,6 +1,8 @@
+version: 0.2
+
 phases:
   install:
-    version: 0.2
+    runtime-versions:
       python: 3.8  # Temporary, Python 3.13.5 will be installed manually
     commands:
       - echo Installing base tools...
