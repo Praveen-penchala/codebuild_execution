@@ -1,0 +1,22 @@
+pipeline {
+    agent any  // Runs on any available agent
+
+    environment {
+        TERRAFORM_VERSION = '1.12.2'
+    }
+
+    stages {
+        stage('Install Base Tools') {
+            steps {
+                sh '''
+                    set -e
+                    echo "> Updating apt package index..."
+                    sudo apt-get update -y
+
+                    echo "> Installing base packages (git, curl, wget, unzip)..."
+                    sudo apt-get install -y git curl wget unzip
+                '''
+            }
+        }
+    }
+}
