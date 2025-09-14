@@ -7,6 +7,7 @@ pipeline {
     }
 
     stages {
+
         stage('Install Terraform 1.13.2') {
             steps {
                 sh '''
@@ -25,6 +26,40 @@ pipeline {
                     echo "> Verifying installation..."
                     terraform version
                 '''
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                dir('iac-terraform') {
+                    sh '''
+                        echo "> Running terraform init..."
+                        terraform version
+                        terraform init -input=false
+                    '''
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                dir('iac-terraform') {
+                    sh '''
+                        echo "> Running terraform plan..."
+                        terraform plan -out=tfplan
+                    '''
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                dir('iac-terraform') {
+                    sh '''
+                        echo "> Running terraform apply..."
+                        terraform apply -auto-approve tfplan
+                    '''
+                }
             }
         }
     }
