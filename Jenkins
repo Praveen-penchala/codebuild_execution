@@ -2,73 +2,29 @@ pipeline {
     agent any
 
     environment {
-        TERRAFORM_VERSION = '1.12.2'
+        TERRAFORM_VERSION = '1.13.2'
+        ARCH = 'amd64'
     }
 
     stages {
-        stage('Install Base Tools') {
+        stage('Install Terraform 1.13.2') {
             steps {
                 sh '''
                     set -e
-                    echo "> Updating apt package index..."
-                    sudo apt-get update -y
 
-                    echo "> Installing base packages (git, curl, wget, unzip)..."
-                    sudo apt-get install -y git curl wget unzip
-                '''
-            }
-        }
-
-        stage('Install Terraform') {
-            steps {
-                sh '''
-                    set -e
                     echo "> Downloading Terraform ${TERRAFORM_VERSION}..."
-                    wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+                    wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${ARCH}.zip
 
                     echo "> Unzipping Terraform..."
-                    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+                    unzip terraform_${TERRAFORM_VERSION}_linux_${ARCH}.zip
 
-                    echo "> Moving Terraform binary to /usr/local/bin..."
+                    echo "> Installing Terraform..."
                     sudo mv terraform /usr/local/bin/
+                    sudo chmod +x /usr/local/bin/terraform
 
-                    echo "> Verifying Terraform installation..."
+                    echo "> Verifying installation..."
                     terraform version
                 '''
-            }
-        }
-
-        stage('Terraform Init') {
-            steps {
-                dir('terraform_code)') {
-                    sh '''
-                        echo "> Running terraform init..."
-                        terraform version
-                        terraform init -input=false
-                    '''
-                }
-            }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                dir('terraform_code') {
-                    sh '''
-                        echo "> Running terraform plan..."
-                        terraform plan -out=tfplan
-                    '''
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                dir('terraform_code') {
-                    sh '''
-                        echo "> Running terraform apply..."
-                        terraform apply -auto-approve tfplan
-                    '''
-                }
             }
         }
     }
