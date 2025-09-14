@@ -1,19 +1,16 @@
-stage('Install System Tools') {
-    steps {
-        sh '''
-            set -e
-            echo "> Updating apt package index..."
-            sudo apt-get update -y
+pipeline {
+    agent any
 
-            echo "> Installing required packages: git, wget, curl, tree, zip"
-            sudo apt-get install -y git wget curl tree zip
-
-            echo "> Verifying installations..."
-            git --version
-            wget --version
-            curl --version
-            tree --version
-            zip -v | head -n 1
-        '''
+    stages {
+        stage('Install System Tools') {
+            steps {
+                sh '''
+                    set -e
+                    echo "Updating packages..."
+                    sudo apt-get update -y
+                    sudo apt-get install -y git wget curl tree zip
+                '''
+            }
+        }
     }
 }
