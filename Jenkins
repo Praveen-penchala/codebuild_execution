@@ -1,66 +1,19 @@
-pipeline {
-    agent any
+stage('Install System Tools') {
+    steps {
+        sh '''
+            set -e
+            echo "> Updating apt package index..."
+            sudo apt-get update -y
 
-    environment {
-        TERRAFORM_VERSION = '1.13.2'
-        ARCH = 'amd64'
-    }
+            echo "> Installing required packages: git, wget, curl, tree, zip"
+            sudo apt-get install -y git wget curl tree zip
 
-    stages {
-
-        stage('Install Terraform 1.13.2') {
-            steps {
-                sh '''
-                    set -e
-
-                    echo "> Downloading Terraform ${TERRAFORM_VERSION}..."
-                    wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${ARCH}.zip
-
-                    echo "> Unzipping Terraform..."
-                    unzip terraform_${TERRAFORM_VERSION}_linux_${ARCH}.zip
-
-                    echo "> Installing Terraform..."
-                    sudo mv terraform /usr/local/bin/
-                    sudo chmod +x /usr/local/bin/terraform
-
-                    echo "> Verifying installation..."
-                    terraform version
-                '''
-            }
-        }
-
-        stage('Terraform Init') {
-            steps {
-                dir('iac-terraform') {
-                    sh '''
-                        echo "> Running terraform init..."
-                        terraform version
-                        terraform init -input=false
-                    '''
-                }
-            }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                dir('iac-terraform') {
-                    sh '''
-                        echo "> Running terraform plan..."
-                        terraform plan -out=tfplan
-                    '''
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                dir('iac-terraform') {
-                    sh '''
-                        echo "> Running terraform apply..."
-                        terraform apply -auto-approve tfplan
-                    '''
-                }
-            }
-        }
+            echo "> Verifying installations..."
+            git --version
+            wget --version
+            curl --version
+            tree --version
+            zip -v | head -n 1
+        '''
     }
 }
