@@ -8,7 +8,7 @@ pipeline {
                     set -e
                     echo "Updating packages..."
                     sudo apt-get update -y
-                    sudo apt-get install -y git wget curl tree zip
+                    sudo apt-get install -y git
                 '''
             }
         }
